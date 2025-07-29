@@ -1,0 +1,7 @@
+# render.yaml
+services:
+  - type: web
+    name: scnbugdefinerx
+    env: static
+    buildCommand: echo "Building static site"
+    staticPublishPath: ./
