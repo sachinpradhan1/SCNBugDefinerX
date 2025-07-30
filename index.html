@@ -1,213 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>SCNBugDefinerX</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-  <style>
-    /* === CYBERPUNK THEME === */
-    :root {
-      --neon-pink: #ff00ff;
-      --neon-cyan: #00ffff;
-      --neon-purple: #9d00ff;
-      --dark: #0a0a0f;
-      --black-glass: rgba(10, 10, 15, 0.85);
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      background-color: var(--dark);
-      color: var(--neon-cyan);
-      font-family: 'Share Tech Mono', monospace;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-
-    /* Animated Grid Background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: 
-        repeating-linear-gradient(0deg, rgba(0, 255, 255, 0.03), rgba(0, 255, 255, 0.03) 1px, transparent 1px, transparent 50px),
-        repeating-linear-gradient(90deg, rgba(0, 255, 255, 0.03), rgba(0, 255, 255, 0.03) 1px, transparent 1px, transparent 50px);
-      pointer-events: none;
-      z-index: -2;
-    }
-
-    /* Scanline effect */
-    body::after {
-      content: '';
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: linear-gradient(rgba(0, 0, 0, 0.2) 50%, rgba(0, 255, 255, 0.02) 50%);
-      background-size: 100% 4px;
-      pointer-events: none;
-      z-index: -1;
-      animation: scanline 15s linear infinite;
-    }
-
-    @keyframes scanline {
-      0% { background-position: 0 0; }
-      100% { background-position: 0 100%; }
-    }
-
-    .container {
-      background: var(--black-glass);
-      backdrop-filter: blur(10px);
-      border: 1px solid var(--neon-cyan);
-      box-shadow: 
-        0 0 10px rgba(0, 255, 255, 0.3),
-        0 0 30px rgba(0, 255, 255, 0.15),
-        inset 0 0 15px rgba(255, 0, 255, 0.1);
-      border-radius: 12px;
-      padding: 40px;
-      max-width: 800px;
-      width: 100%;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      z-index: 1;
-    }
-
-    .container::before {
-      content: '';
-      position: absolute;
-      top: -10px; left: -10px; right: -10px; bottom: -10px;
-      background: linear-gradient(45deg, var(--neon-pink), var(--neon-cyan), var(--neon-purple));
-      z-index: -1;
-      border-radius: 20px;
-      filter: blur(15px);
-      opacity: 0.4;
-    }
-
-    h1 {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 3rem;
-      margin-bottom: 15px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      color: #fff;
-      text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-cyan);
-      position: relative;
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      line-height: 1.6;
-      color: #e0ffff;
-    }
-
-    .btn {
-      display: inline-block;
-      margin: 15px;
-      padding: 14px 28px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-      color: #000;
-      background: var(--neon-cyan);
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-      font-weight: bold;
-      letter-spacing: 1px;
-      box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-    }
-
-    .btn:hover {
-      background: var(--neon-pink);
-      color: white;
-      transform: translateY(-3px);
-      box-shadow: 0 0 25px rgba(255, 0, 255, 0.8);
-    }
-
-    .btn:active {
-      transform: translateY(1px);
-    }
-
-    .social-links {
-      margin-top: 30px;
-      display: flex;
-      justify-content: center;
-      gap: 25px;
-    }
-
-    .social-links a {
-      color: #fff;
-      font-size: 1.8rem;
-      transition: all 0.3s ease;
-      text-shadow: 0 0 10px var(--neon-pink);
-    }
-
-    .social-links a:hover i {
-      color: var(--neon-pink);
-      transform: scale(1.3);
-    }
-
-    .glitch {
-      position: relative;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 2rem;
-      color: #fff;
-      text-shadow: 0 0 5px var(--neon-cyan);
-      animation: glitch 2s infinite;
-    }
-
-    @keyframes glitch {
-      0% { text-shadow: 0 0 5px var(--neon-cyan); }
-      50% { text-shadow: 0 0 20px var(--neon-pink); }
-      100% { text-shadow: 0 0 5px var(--neon-purple); }
-    }
-
-    footer {
-      margin-top: 40px;
-      font-size: 0.9rem;
-      color: rgba(0, 255, 255, 0.6);
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCNBugDefinerX - Security Scanner</title>
+    <style>
+        :root {
+            --primary: #00ff00;
+            --secondary: #00ffff;
+            --danger: #ff0000;
+            --warning: #ffff00;
+            --dark: #000000;
+            --darker: #111111;
+            --darkest: #222222;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: var(--dark);
+            color: var(--primary);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            border-bottom: 1px solid var(--primary);
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .brand-primary { color: var(--secondary); }
+        .brand-danger { color: var(--danger); }
+        
+        .card {
+            background-color: var(--darker);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary);
+        }
+        
+        input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--darkest);
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 16px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: var(--dark);
+            border: none;
+            border-radius: 3px;
+            font-family: monospace;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        button:hover {
+            background-color: var(--secondary);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        
+        button:disabled {
+            background-color: var(--darkest);
+            color: var(--darkest);
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 255, 0, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .score-card {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .score {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .score-excellent { color: var(--primary); }
+        .score-good { color: #90EE90; }
+        .score-fair { color: var(--warning); }
+        .score-poor { color: var(--danger); }
+        
+        .vulnerability {
+            border-left: 4px solid var(--danger);
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: rgba(255, 0, 0, 0.05);
+        }
+        
+        .severity-critical { border-color: var(--danger); }
+        .severity-high { border-color: #ff8000; }
+        .severity-medium { border-color: var(--warning); }
+        .severity-low { border-color: #0080ff; }
+        
+        .severity-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .badge-critical { background-color: var(--danger); color: white; }
+        .badge-high { background-color: #ff8000; color: white; }
+        .badge-medium { background-color: var(--warning); color: black; }
+        .badge-low { background-color: #0080ff; color: white; }
+        
+        .vuln-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .vuln-category {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .vuln-description {
+            margin-bottom: 15px;
+        }
+        
+        .remediation-title {
+            color: var(--secondary);
+            margin: 15px 0 10px;
+        }
+        
+        .remediation-list {
+            padding-left: 20px;
+        }
+        
+        .remediation-list li {
+            margin-bottom: 5px;
+        }
+        
+        .disclaimer {
+            background-color: rgba(255, 0, 0, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid var(--primary);
+            margin-top: 30px;
+            color: #808080;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .score {
+                font-size: 3rem;
+            }
+        }
+    </style>
 </head>
 <body>
-
-  <div class="container">
-    <h1>SCNBugDefinerX</h1>
-    <p class="glitch">Hunting Bugs in the Neon Code...</p>
-    <p>A next-gen tool for identifying vulnerabilities with precision. Built for hackers, by hackers.</p>
-
-    <button class="btn">Analyze Code</button>
-    <button class="btn">Scan System</button>
-
-    <div class="social-links">
-      <!-- LinkedIn -->
-      <a href="https://linkedin.com/in/sachinpradhan1" target="_blank" title="LinkedIn">
-        <i class="fab fa-linkedin-in"></i>
-      </a>
-      <!-- Instagram -->
-      <a href="https://www.instagram.com/scn.o1?igsh=bjJlano3Y3JoYmZy" target="_blank" title="Instagram">
-        <i class="fab fa-instagram"></i>
-      </a>
+    <div class="container">
+        <header>
+            <h1><span class="brand-primary">SCN</span>BugDefiner<span class="brand-danger">X</span></h1>
+            <p>Advanced Website Security Scanner</p>
+        </header>
+        
+        <div class="disclaimer">
+            ⚠️ This is a demonstration tool. For real security scanning, use professional tools with proper authorization.
+        </div>
+        
+        <div class="card">
+            <h2>Security Vulnerability Scanner</h2>
+            <div class="input-group">
+                <label for="urlInput">Enter Website URL</label>
+                <input type="url" id="urlInput" placeholder="https://example.com" />
+            </div>
+            <button id="scanButton">🔍 Analyze Website Security</button>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Analyzing website security...</p>
+            <p>This is a demonstration. Real scanning requires proper authorization.</p>
+        </div>
+        
+        <div id="results"></div>
+        
+        <footer>
+            <p>Powered by Sachin | 
+                <a href="https://www.linkedin.com/in/sachin-pradhan-ba82a927a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
+                   target="_blank" 
+                   style="color: var(--secondary); text-decoration: none;">
+                    LinkedIn Profile
+                </a>
+            </p>
+        </footer>
     </div>
 
-    <footer>
-      &copy; <script>document.write(new Date().getFullYear())</script> SCNBugDefinerX | Secured in Cyber Space
-    </footer>
-  </div>
-
+    <script>
+        document.getElementById('scanButton').addEventListener('click', scanWebsite);
+        
+        async function scanWebsite() {
+            const urlInput = document.getElementById('urlInput');
+            const resultsDiv = document.getElementById('results');
+            const loadingDiv = document.getElementById('loading');
+            const scanButton = document.getElementById('scanButton');
+            
+            const url = urlInput.value.trim();
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+            
+            // Show loading
+            loadingDiv.style.display = 'block';
+            scanButton.disabled = true;
+            resultsDiv.innerHTML = '';
+            
+            // Simulate scanning process
+            try {
+                // In a real implementation, this would call your backend API
+                // For demo purposes, we'll simulate results
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                const result = generateDemoResults(url);
+                displayResults(result);
+            } catch (error) {
+                resultsDiv.innerHTML = `
+                    <div class="card" style="border-color: var(--danger);">
+                        <h3 style="color: var(--danger);">Error</h3>
+                        <p>Failed to scan website. Please try again.</p>
+                        <p>Error: ${error.message}</p>
+                    </div>
+                `;
+            } finally {
+                loadingDiv.style.display = 'none';
+                scanButton.disabled = false;
+            }
+        }
+        
+        function generateDemoResults(url) {
+            // Generate realistic demo results
+            const vulnerabilities = [
+                {
+                    id: "missing-headers",
+                    title: "Missing Security Headers",
+                    severity: "Medium",
+                    category: "Security Misconfiguration",
+                    description: "Important security headers are missing from HTTP responses",
+                    location: url,
+                    evidence: [
+                        {"header": "Strict-Transport-Security", "issue": "HSTS header missing"},
+                        {"header": "Content-Security-Policy", "issue": "CSP header missing"}
+                    ],
+                    remediation: [
+                        "Add Strict-Transport-Security header",
+                        "Implement Content-Security-Policy",
+                        "Add X-Frame-Options header"
+                    ],
+                    references: [
+                        "https://owasp.org/www-project-secure-headers/"
+                    ]
+                },
+                {
+                    id: "outdated-jquery",
+                    title: "Outdated jQuery Version",
+                    severity: "Medium",
+                    category: "Vulnerable Components",
+                    description: "Outdated jQuery version detected - may contain known vulnerabilities",
+                    location: "https://code.jquery.com/jquery-1.12.4.min.js",
+                    evidence: "jQuery version 1.12.4 detected",
+                    remediation: [
+                        "Upgrade to the latest jQuery version",
+                        "Use a CDN with SRI integrity checks"
+                    ],
+                    references: [
+                        "https://jquery.com/download/"
+                    ]
+                },
+                {
+                    id: "info-disclosure",
+                    title: "Information Disclosure",
+                    severity: "Low",
+                    category: "Information Disclosure",
+                    description: "Debug information found in HTML source code",
+                    location: "HTML Source Code",
+                    evidence: "Pattern matched: debug.*?true",
+                    remediation: [
+                        "Remove debug information from production code",
+                        "Sanitize error messages shown to users"
+                    ],
+                    references: []
+                }
+            ];
+            
+            // Randomly decide if we show critical vulnerabilities
+            if (Math.random() > 0.7) {
+                vulnerabilities.unshift({
+                    id: "sqli",
+                    title: "SQL Injection Vulnerability",
+                    severity: "Critical",
+                    category: "Injection",
+                    description: "Parameter 'id' is vulnerable to SQL Injection",
+                    location: `${url}?id=1' OR '1'='1`,
+                    evidence: "Payload: ' OR '1'='1 | Error: you have an error in your sql syntax",
+                    remediation: [
+                        "Use parameterized queries/prepared statements",
+                        "Validate and sanitize all user inputs"
+                    ],
+                    references: [
+                        "https://owasp.org/www-community/attacks/SQL_Injection"
+                    ]
+                });
+            }
+            
+            const overallScore = Math.floor(Math.random() * 40) + 60; // 60-99
+            
+            return {
+                url: url,
+                overall_score: overallScore,
+                vulnerabilities: vulnerabilities,
+                scan_time: (Math.random() * 5 + 2).toFixed(2) // 2-7 seconds
+            };
+        }
+        
+        function displayResults(result) {
+            const resultsDiv = document.getElementById('results');
+            
+            const scoreClass = getScoreClass(result.overall_score);
+            
+            let html = `
+                <div class="card">
+                    <h2>Security Analysis Complete</h2>
+                    <div class="score-card">
+                        <div class="score ${scoreClass}">${result.overall_score}%</div>
+                        <p>Security Score: ${getScoreLabel(result.overall_score)}</p>
+                        <p>Scan completed in ${result.scan_time} seconds</p>
+                    </div>
+            `;
+            
+            if (result.vulnerabilities && result.vulnerabilities.length > 0) {
+                html += `<h3>Security Issues Found (${result.vulnerabilities.length})</h3>`;
+                result.vulnerabilities.forEach(vuln => {
+                    const severityClass = `severity-${vuln.severity.toLowerCase()}`;
+                    const badgeClass = `badge-${vuln.severity.toLowerCase()}`;
+                    
+                    html += `
+                        <div class="vulnerability ${severityClass}">
+                            <div class="vuln-title">
+                                <span class="severity-badge ${badgeClass}">${vuln.severity}</span>
+                                ${vuln.title}
+                            </div>
+                            <div class="vuln-category">${vuln.category}</div>
+                            <div class="vuln-description">${vuln.description}</div>
+                            <div><strong>Location:</strong> ${vuln.location}</div>
+                            
+                            <div class="remediation-title">🔧 Remediation Steps:</div>
+                            <ul class="remediation-list">
+                                ${vuln.remediation.map(step => `<li>${step}</li>`).join('')}
+                            </ul>
+                            
+                            ${vuln.references && vuln.references.length > 0 ? `
+                                <div class="remediation-title">📚 References:</div>
+                                <ul class="remediation-list">
+                                    ${vuln.references.map(ref => `<li><a href="${ref}" target="_blank" style="color: var(--secondary);">${ref}</a></li>`).join('')}
+                                </ul>
+                            ` : ''}
+                        </div>
+                    `;
+                });
+            } else {
+                html += `
+                    <div style="text-align: center; color: var(--primary);">
+                        <h3>🎉 No Critical Vulnerabilities Found</h3>
+                        <p>This website appears to have good security practices</p>
+                    </div>
+                `;
+            }
+            
+            html += `</div>`;
+            resultsDiv.innerHTML = html;
+        }
+        
+        function getScoreClass(score) {
+            if (score >= 80) return 'score-excellent';
+            if (score >= 60) return 'score-good';
+            if (score >= 40) return 'score-fair';
+            return 'score-poor';
+        }
+        
+        function getScoreLabel(score) {
+            if (score >= 80) return 'Excellent';
+            if (score >= 60) return 'Good';
+            if (score >= 40) return 'Fair';
+            return 'Poor';
+        }
+    </script>
 </body>
 </html>
