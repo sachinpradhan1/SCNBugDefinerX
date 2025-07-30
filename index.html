@@ -6,228 +6,306 @@
     <title>SCNBugDefinerX - Security Scanner</title>
     <style>
         :root {
-            --primary: #00ff00;
-            --secondary: #00ffff;
-            --danger: #ff0000;
-            --warning: #ffff00;
-            --dark: #000000;
-            --darker: #111111;
-            --darkest: #222222;
+            --primary: #00ff88; /* Neon green */
+            --secondary: #ff00ff; /* Neon pink */
+            --danger: #ff0044; /* Bright red */
+            --warning: #ffcc00; /* Neon yellow */
+            --dark: #0a0a1a; /* Darker cyberpunk background */
+            --darker: #141432; /* Slightly lighter dark */
+            --darkest: #1e1e3c; /* Darkest shade */
+            --glow: #00ff88; /* Glow effect color */
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
-            font-family: 'Courier New', monospace;
-            background-color: var(--dark);
+            font-family: 'Orbitron', 'Courier New', monospace; /* Futuristic font */
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 100%);
             color: var(--primary);
             line-height: 1.6;
             min-height: 100vh;
+            overflow-x: hidden;
+            animation: glitch-bg 5s infinite alternate;
         }
-        
+
+        @keyframes glitch-bg {
+            0% { background-position: 0 0; }
+            2% { background-position: 2px 0; }
+            4% { background-position: -2px 0; }
+            100% { background-position: 0 0; }
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            position: relative;
+            z-index: 1;
         }
-        
+
         header {
             text-align: center;
-            border-bottom: 1px solid var(--primary);
+            border-bottom: 2px solid var(--primary);
             padding: 20px 0;
             margin-bottom: 30px;
+            text-shadow: 0 0 10px var(--glow);
+            animation: neon-flicker 3s infinite;
         }
-        
+
+        @keyframes neon-flicker {
+            0%, 100% { opacity: 1; text-shadow: 0 0 10px var(--glow), 0 0 20px var(--glow); }
+            2%, 4% { opacity: 0.8; text-shadow: none; }
+        }
+
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 3rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        
+
         .brand-primary { color: var(--secondary); }
         .brand-danger { color: var(--danger); }
-        
+
         .card {
-            background-color: var(--darker);
-            border: 1px solid var(--primary);
-            border-radius: 5px;
+            background: rgba(20, 20, 50, 0.9);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
             padding: 25px;
             margin-bottom: 25px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+            backdrop-filter: blur(5px);
+            transition: transform 0.3s ease;
         }
-        
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+        }
+
         .input-group {
             margin-bottom: 20px;
         }
-        
+
         label {
             display: block;
             margin-bottom: 8px;
             color: var(--secondary);
+            font-weight: bold;
+            text-shadow: 0 0 5px var(--secondary);
         }
-        
+
         input[type="url"] {
             width: 100%;
             padding: 12px;
-            background-color: var(--darkest);
+            background: rgba(30, 30, 60, 0.8);
             color: var(--primary);
-            border: 1px solid var(--primary);
-            border-radius: 3px;
-            font-family: monospace;
+            border: 2px solid var(--primary);
+            border-radius: 5px;
+            font-family: 'Orbitron', monospace;
             font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
         }
-        
+
+        input[type="url"]:focus {
+            outline: none;
+            box-shadow: 0 0 15px var(--glow);
+        }
+
         button {
             width: 100%;
             padding: 14px;
-            background-color: var(--primary);
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: var(--dark);
             border: none;
-            border-radius: 3px;
-            font-family: monospace;
+            border-radius: 5px;
+            font-family: 'Orbitron', monospace;
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
             text-transform: uppercase;
+            box-shadow: 0 0 15px var(--glow);
+            transition: all 0.3s ease;
         }
-        
+
         button:hover {
-            background-color: var(--secondary);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+            background: linear-gradient(45deg, var(--secondary), var(--primary));
+            box-shadow: 0 0 25px var(--glow);
+            transform: scale(1.02);
         }
-        
+
         button:disabled {
-            background-color: var(--darkest);
+            background: var(--darkest);
             color: var(--darkest);
             cursor: not-allowed;
+            box-shadow: none;
         }
-        
+
         .loading {
             text-align: center;
             padding: 30px;
         }
-        
+
         .spinner {
-            border: 4px solid rgba(0, 255, 0, 0.3);
+            border: 4px solid rgba(0, 255, 136, 0.3);
             border-radius: 50%;
             border-top: 4px solid var(--primary);
             width: 40px;
             height: 40px;
-            animation: spin 1s linear infinite;
+            animation: spin 1s linear infinite, glitch 0.1s infinite;
             margin: 0 auto 20px;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
+
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+            100% { transform: translate(0); }
+        }
+
         .score-card {
             text-align: center;
             padding: 30px;
+            background: rgba(20, 20, 50, 0.5);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
         }
-        
+
         .score {
             font-size: 4rem;
             font-weight: bold;
             margin: 20px 0;
+            text-shadow: 0 0 10px var(--glow);
         }
-        
+
         .score-excellent { color: var(--primary); }
-        .score-good { color: #90EE90; }
+        .score-good { color: #66ff99; }
         .score-fair { color: var(--warning); }
         .score-poor { color: var(--danger); }
-        
+
         .vulnerability {
             border-left: 4px solid var(--danger);
             padding: 15px;
             margin-bottom: 15px;
-            background-color: rgba(255, 0, 0, 0.05);
+            background: rgba(255, 0, 68, 0.1);
+            box-shadow: 0 0 10px rgba(255, 0, 68, 0.2);
         }
-        
+
         .severity-critical { border-color: var(--danger); }
-        .severity-high { border-color: #ff8000; }
+        .severity-high { border-color: #ff5500; }
         .severity-medium { border-color: var(--warning); }
-        .severity-low { border-color: #0080ff; }
-        
+        .severity-low { border-color: #00ccff; }
+
         .severity-badge {
             display: inline-block;
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
             font-weight: bold;
             margin-right: 10px;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
         }
-        
-        .badge-critical { background-color: var(--danger); color: white; }
-        .badge-high { background-color: #ff8000; color: white; }
-        .badge-medium { background-color: var(--warning); color: black; }
-        .badge-low { background-color: #0080ff; color: white; }
-        
+
+        .badge-critical { background: var(--danger); color: white; }
+        .badge-high { background: #ff5500; color: white; }
+        .badge-medium { background: var(--warning); color: black; }
+        .badge-low { background: #00ccff; color: white; }
+
         .vuln-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             margin-bottom: 10px;
+            text-shadow: 0 0 5px var(--secondary);
         }
-        
+
         .vuln-category {
             color: var(--secondary);
             font-size: 0.9rem;
             margin-bottom: 10px;
         }
-        
+
         .vuln-description {
             margin-bottom: 15px;
         }
-        
+
         .remediation-title {
             color: var(--secondary);
             margin: 15px 0 10px;
+            text-shadow: 0 0 5px var(--secondary);
         }
-        
+
         .remediation-list {
             padding-left: 20px;
         }
-        
+
         .remediation-list li {
-            margin-bottom: 5px;
+            margin-bottom: 8px;
         }
-        
+
         .disclaimer {
-            background-color: rgba(255, 0, 0, 0.1);
-            border: 1px solid var(--danger);
+            background: rgba(255, 0, 68, 0.2);
+            border: 2px solid var(--danger);
             border-radius: 5px;
             padding: 15px;
             margin: 20px 0;
             text-align: center;
             font-size: 0.9rem;
+            text-shadow: 0 0 5px var(--danger);
+            animation: pulse 2s infinite;
         }
-        
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px var(--danger); }
+            50% { box-shadow: 0 0 20px var(--danger); }
+            100% { box-shadow: 0 0 10px var(--danger); }
+        }
+
         footer {
             text-align: center;
             padding: 20px;
-            border-top: 1px solid var(--primary);
+            border-top: 2px solid var(--primary);
             margin-top: 30px;
-            color: #808080;
+            color: var(--secondary);
+            text-shadow: 0 0 5px var(--secondary);
         }
-        
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        footer a:hover {
+            text-shadow: 0 0 10px var(--glow);
+            transform: scale(1.1);
+        }
+
         @media (max-width: 768px) {
             .container {
-                padding: 10px;
+                padding: 15px;
             }
-            
+
             h1 {
-                font-size: 2rem;
+                font-size: 2.2rem;
             }
-            
+
             .score {
                 font-size: 3rem;
             }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -235,11 +313,11 @@
             <h1><span class="brand-primary">SCN</span>BugDefiner<span class="brand-danger">X</span></h1>
             <p>Advanced Website Security Scanner</p>
         </header>
-        
+
         <div class="disclaimer">
             ⚠️ This is a demonstration tool. For real security scanning, use professional tools with proper authorization.
         </div>
-        
+
         <div class="card">
             <h2>Security Vulnerability Scanner</h2>
             <div class="input-group">
@@ -248,52 +326,46 @@
             </div>
             <button id="scanButton">🔍 Analyze Website Security</button>
         </div>
-        
+
         <div id="loading" class="loading" style="display: none;">
             <div class="spinner"></div>
             <p>Analyzing website security...</p>
             <p>This is a demonstration. Real scanning requires proper authorization.</p>
         </div>
-        
+
         <div id="results"></div>
-        
+
         <footer>
             <p>Powered by Sachin | 
                 <a href="https://www.linkedin.com/in/sachin-pradhan-ba82a927a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
-                   target="_blank" 
-                   style="color: var(--secondary); text-decoration: none;">
-                    LinkedIn Profile
-                </a>
+                   target="_blank">LinkedIn</a> | 
+                <a href="https://www.instagram.com/scn.o1?igsh=bjJlano3Y3JoYmZy" 
+                   target="_blank">Instagram</a>
             </p>
         </footer>
     </div>
 
     <script>
         document.getElementById('scanButton').addEventListener('click', scanWebsite);
-        
+
         async function scanWebsite() {
             const urlInput = document.getElementById('urlInput');
             const resultsDiv = document.getElementById('results');
             const loadingDiv = document.getElementById('loading');
             const scanButton = document.getElementById('scanButton');
-            
+
             const url = urlInput.value.trim();
             if (!url) {
                 alert('Please enter a URL');
                 return;
             }
-            
-            // Show loading
+
             loadingDiv.style.display = 'block';
             scanButton.disabled = true;
             resultsDiv.innerHTML = '';
-            
-            // Simulate scanning process
+
             try {
-                // In a real implementation, this would call your backend API
-                // For demo purposes, we'll simulate results
                 await new Promise(resolve => setTimeout(resolve, 3000));
-                
                 const result = generateDemoResults(url);
                 displayResults(result);
             } catch (error) {
@@ -309,12 +381,11 @@
                 scanButton.disabled = false;
             }
         }
-        
+
         function generateDemoResults(url) {
-            // Generate realistic demo results
             const vulnerabilities = [
                 {
-                    id: "missing-headers",
+                    id: "maken-header",
                     title: "Missing Security Headers",
                     severity: "Medium",
                     category: "Security Misconfiguration",
@@ -364,8 +435,7 @@
                     references: []
                 }
             ];
-            
-            // Randomly decide if we show critical vulnerabilities
+
             if (Math.random() > 0.7) {
                 vulnerabilities.unshift({
                     id: "sqli",
@@ -384,22 +454,20 @@
                     ]
                 });
             }
-            
-            const overallScore = Math.floor(Math.random() * 40) + 60; // 60-99
-            
+
+            const overallScore = Math.floor(Math.random() * 40) + 60;
             return {
                 url: url,
                 overall_score: overallScore,
                 vulnerabilities: vulnerabilities,
-                scan_time: (Math.random() * 5 + 2).toFixed(2) // 2-7 seconds
+                scan_time: (Math.random() * 5 + 2).toFixed(2)
             };
         }
-        
+
         function displayResults(result) {
             const resultsDiv = document.getElementById('results');
-            
             const scoreClass = getScoreClass(result.overall_score);
-            
+
             let html = `
                 <div class="card">
                     <h2>Security Analysis Complete</h2>
@@ -409,13 +477,13 @@
                         <p>Scan completed in ${result.scan_time} seconds</p>
                     </div>
             `;
-            
+
             if (result.vulnerabilities && result.vulnerabilities.length > 0) {
                 html += `<h3>Security Issues Found (${result.vulnerabilities.length})</h3>`;
                 result.vulnerabilities.forEach(vuln => {
                     const severityClass = `severity-${vuln.severity.toLowerCase()}`;
                     const badgeClass = `badge-${vuln.severity.toLowerCase()}`;
-                    
+
                     html += `
                         <div class="vulnerability ${severityClass}">
                             <div class="vuln-title">
@@ -425,12 +493,10 @@
                             <div class="vuln-category">${vuln.category}</div>
                             <div class="vuln-description">${vuln.description}</div>
                             <div><strong>Location:</strong> ${vuln.location}</div>
-                            
                             <div class="remediation-title">🔧 Remediation Steps:</div>
                             <ul class="remediation-list">
                                 ${vuln.remediation.map(step => `<li>${step}</li>`).join('')}
                             </ul>
-                            
                             ${vuln.references && vuln.references.length > 0 ? `
                                 <div class="remediation-title">📚 References:</div>
                                 <ul class="remediation-list">
@@ -448,18 +514,18 @@
                     </div>
                 `;
             }
-            
+
             html += `</div>`;
             resultsDiv.innerHTML = html;
         }
-        
+
         function getScoreClass(score) {
             if (score >= 80) return 'score-excellent';
             if (score >= 60) return 'score-good';
             if (score >= 40) return 'score-fair';
             return 'score-poor';
         }
-        
+
         function getScoreLabel(score) {
             if (score >= 80) return 'Excellent';
             if (score >= 60) return 'Good';
