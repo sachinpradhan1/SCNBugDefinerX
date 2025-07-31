@@ -6,12 +6,12 @@
     <title>SCNBugDefinerX - Security Scanner</title>
     <style>
         :root {
-            --matrix-green: #00ff41; /* Classic matrix green */
-            --hacker-red: #ff0033; /* Bright hacker red */
-            --terminal-text: #cccccc; /* Light gray for terminal text */
-            --terminal-bg: #0a0a0a; /* Very dark background */
-            --terminal-border: #333333; /* Dark gray border */
-            --glow: rgba(0, 255, 65, 0.7); /* Matrix glow effect */
+            --matrix-green: #00ff41;
+            --hacker-red: #ff0033;
+            --terminal-text: #cccccc;
+            --terminal-bg: #0a0a0a;
+            --terminal-border: #333333;
+            --glow: rgba(0, 255, 65, 0.7);
         }
 
         * {
@@ -21,7 +21,7 @@
         }
 
         body {
-            font-family: 'Courier New', monospace; /* Classic terminal font */
+            font-family: 'Courier New', monospace;
             background-color: var(--terminal-bg);
             color: var(--matrix-green);
             line-height: 1.4;
@@ -39,6 +39,12 @@
             padding: 20px;
             position: relative;
             z-index: 1;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         header {
@@ -48,17 +54,16 @@
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            animation: glitch 5s infinite alternate;
         }
 
-        header::after {
-            content: "";
-            position: absolute;
-            bottom: -10px;
-            left: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--matrix-green);
-            box-shadow: 0 0 10px var(--glow);
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(2px, -2px); }
+            60% { transform: translate(-1px, 1px); }
+            80% { transform: translate(1px, -1px); }
+            100% { transform: translate(0); }
         }
 
         h1 {
@@ -78,9 +83,6 @@
             }
         }
 
-        .brand-primary { color: var(--matrix-green); }
-        .brand-danger { color: var(--hacker-red); }
-
         .card {
             background: rgba(10, 10, 10, 0.9);
             border: 1px solid var(--terminal-border);
@@ -88,6 +90,12 @@
             padding: 15px;
             margin-bottom: 20px;
             position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 15px var(--glow);
+            transform: translateY(-3px);
         }
 
         .card::before {
@@ -97,24 +105,12 @@
             top: 5px;
             color: var(--matrix-green);
             font-weight: bold;
+            animation: blink 1s infinite;
         }
 
-        .card h2 {
-            color: var(--matrix-green);
-            margin-bottom: 15px;
-            border-bottom: 1px dotted var(--terminal-border);
-            padding-bottom: 5px;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: var(--terminal-text);
-            font-weight: bold;
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         input[type="url"] {
@@ -125,12 +121,13 @@
             border: 1px solid var(--terminal-border);
             font-family: 'Courier New', monospace;
             font-size: 14px;
+            transition: all 0.3s;
         }
 
         input[type="url"]:focus {
             outline: none;
             border-color: var(--matrix-green);
-            box-shadow: 0 0 5px var(--glow);
+            box-shadow: 0 0 10px var(--glow);
         }
 
         button {
@@ -150,7 +147,11 @@
 
         button:hover {
             background: rgba(0, 255, 65, 0.1);
-            box-shadow: 0 0 10px var(--glow);
+            box-shadow: 0 0 15px var(--glow);
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         button:disabled {
@@ -163,6 +164,13 @@
             padding: 20px;
             border: 1px solid var(--terminal-border);
             margin: 20px 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { border-color: var(--terminal-border); }
+            50% { border-color: var(--matrix-green); }
+            100% { border-color: var(--terminal-border); }
         }
 
         .spinner {
@@ -173,11 +181,6 @@
             height: 30px;
             animation: spin 1s linear infinite;
             margin: 0 auto 15px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .scanning-text {
@@ -194,57 +197,18 @@
             to { width: 100% }
         }
 
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: var(--matrix-green) }
-        }
-
-        .score-card {
-            text-align: center;
-            padding: 20px;
-            border: 1px solid var(--terminal-border);
-            margin: 20px 0;
-            position: relative;
-        }
-
-        .score-card::before {
-            content: "SCAN_RESULTS";
-            position: absolute;
-            top: -10px;
-            left: 10px;
-            background: var(--terminal-bg);
-            padding: 0 5px;
-            color: var(--matrix-green);
-            font-size: 12px;
-        }
-
-        .score {
-            font-size: 3rem;
-            font-weight: bold;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-        }
-
-        .score-excellent { color: var(--matrix-green); }
-        .score-good { color: #33ff33; }
-        .score-fair { color: #ffff33; }
-        .score-poor { color: var(--hacker-red); }
-
         .vulnerability {
             border-left: 3px solid var(--hacker-red);
             padding: 15px;
             margin-bottom: 15px;
             background: rgba(20, 20, 20, 0.8);
             position: relative;
+            animation: slideIn 0.5s ease-out;
         }
 
-        .vulnerability::before {
-            content: "[!]";
-            position: absolute;
-            left: -25px;
-            top: 15px;
-            color: var(--hacker-red);
-            font-weight: bold;
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
         .severity-critical { border-color: var(--hacker-red); }
@@ -260,45 +224,7 @@
             font-weight: bold;
             margin-right: 10px;
             background: #111;
-        }
-
-        .badge-critical { color: var(--hacker-red); border: 1px solid var(--hacker-red); }
-        .badge-high { color: #ff5500; border: 1px solid #ff5500; }
-        .badge-medium { color: #ffff33; border: 1px solid #ffff33; }
-        .badge-low { color: #33ccff; border: 1px solid #33ccff; }
-
-        .vuln-title {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-            color: var(--terminal-text);
-        }
-
-        .vuln-category {
-            color: var(--matrix-green);
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            font-style: italic;
-        }
-
-        .vuln-description {
-            margin-bottom: 15px;
-            color: var(--terminal-text);
-        }
-
-        .remediation-title {
-            color: var(--matrix-green);
-            margin: 15px 0 10px;
-            font-weight: bold;
-        }
-
-        .remediation-list {
-            padding-left: 20px;
-            color: var(--terminal-text);
-        }
-
-        .remediation-list li {
-            margin-bottom: 8px;
-            list-style-type: square;
+            animation: pulse 2s infinite;
         }
 
         .disclaimer {
@@ -308,17 +234,7 @@
             color: var(--hacker-red);
             background: rgba(20, 0, 0, 0.5);
             position: relative;
-        }
-
-        .disclaimer::before {
-            content: "WARNING";
-            position: absolute;
-            top: -10px;
-            left: 10px;
-            background: var(--terminal-bg);
-            padding: 0 5px;
-            color: var(--hacker-red);
-            font-size: 12px;
+            animation: glitch 5s infinite alternate;
         }
 
         footer {
@@ -328,29 +244,10 @@
             margin-top: 30px;
             color: var(--terminal-text);
             font-size: 0.9rem;
+            animation: fadeIn 2s ease-out;
         }
 
-        footer a {
-            color: var(--matrix-green);
-            text-decoration: none;
-            margin: 0 10px;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        /* Terminal-like blinking cursor effect */
-        .cursor {
-            animation: blink 1s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-
-        /* Matrix rain effect in background */
+        /* Matrix rain effect */
         .matrix-rain {
             position: fixed;
             top: 0;
@@ -363,16 +260,8 @@
         }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
             h1 {
                 font-size: 1.8rem;
-            }
-
-            .score {
-                font-size: 2.5rem;
             }
         }
     </style>
@@ -383,7 +272,7 @@
 
     <div class="container">
         <header>
-            <h1><span class="brand-primary">root@kali</span>:<span class="brand-danger">~/scanner</span># ./SCNBugDefinerX</h1>
+            <h1><span style="color: var(--matrix-green)">root@kali</span>:<span style="color: var(--hacker-red)">~/scanner</span># ./SCNBugDefinerX</h1>
             <p>_ Advanced Website Security Scanner _</p>
         </header>
 
@@ -393,7 +282,7 @@
 
         <div class="card">
             <h2>SECURITY SCANNER INTERFACE</h2>
-            <div class="input-group">
+            <div style="margin-bottom: 15px;">
                 <label for="urlInput">TARGET_URL></label>
                 <input type="url" id="urlInput" placeholder="https://target.com" />
             </div>
@@ -403,19 +292,15 @@
         <div id="loading" class="loading" style="display: none;">
             <div class="spinner"></div>
             <p class="scanning-text">SCANNING TARGET... ANALYZING SECURITY HEADERS... CHECKING FOR VULNERABILITIES...</p>
-            <p>This is a demonstration. Real scanning requires proper authorization.</p>
         </div>
 
         <div id="results"></div>
 
         <footer>
-            <p>root@kali:~# <span class="cursor">_</span></p>
-            <p>CONNECT:</p>
-            <p>
-                <a href="https://www.linkedin.com/in/sachin-pradhan-ba82a927a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" 
-                   target="_blank">[LINKEDIN]</a> | 
-                <a href="https://www.instagram.com/scn.o1?igsh=bjJlano3Y3JoYmZy" 
-                   target="_blank">[INSTAGRAM]</a>
+            <p>root@kali:~# <span style="animation: blink 1s infinite">_</span></p>
+            <p>CONNECT: 
+                <a href="https://www.linkedin.com/in/sachin-pradhan-ba82a927a" target="_blank" style="color: var(--matrix-green)">[LINKEDIN]</a> | 
+                <a href="https://www.instagram.com/scn.o1" target="_blank" style="color: var(--matrix-green)">[INSTAGRAM]</a>
             </p>
         </footer>
     </div>
@@ -428,41 +313,34 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         
-        const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
-        const symbols = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
-        
-        const alphabet = katakana + latin + nums + symbols;
-        
-        const fontSize = 16;
+        const chars = "01";
+        const fontSize = 14;
         const columns = canvas.width / fontSize;
+        const drops = [];
         
-        const rainDrops = [];
-        
-        for (let x = 0; x < columns; x++) {
-            rainDrops[x] = 1;
+        for (let i = 0; i < columns; i++) {
+            drops[i] = Math.random() * -100;
         }
         
-        const draw = () => {
+        function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             ctx.fillStyle = '#0F0';
             ctx.font = fontSize + 'px monospace';
             
-            for (let i = 0; i < rainDrops.length; i++) {
-                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                 
-                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    rainDrops[i] = 0;
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
                 }
-                rainDrops[i]++;
+                drops[i]++;
             }
-        };
+        }
         
-        setInterval(draw, 30);
+        setInterval(drawMatrix, 50);
 
         // Scanner functionality
         document.getElementById('scanButton').addEventListener('click', scanWebsite);
@@ -479,12 +357,20 @@
                 return;
             }
 
+            // Basic URL validation
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                alert('ERROR: INVALID URL FORMAT. MUST START WITH HTTP:// OR HTTPS://');
+                return;
+            }
+
             loadingDiv.style.display = 'block';
             scanButton.disabled = true;
             resultsDiv.innerHTML = '';
 
             try {
-                await new Promise(resolve => setTimeout(resolve, 3000));
+                // Simulate scanning process with progress
+                await simulateScanProgress();
+                
                 const result = generateDemoResults(url);
                 displayResults(result);
             } catch (error) {
@@ -502,92 +388,168 @@
             }
         }
 
-        function generateDemoResults(url) {
-            const vulnerabilities = [
-                {
-                    id: "maken-header",
-                    title: "MISSING_SECURITY_HEADERS",
-                    severity: "Medium",
-                    category: "Security Misconfiguration",
-                    description: "Critical security headers missing from HTTP responses. This exposes the site to various attacks including clickjacking, XSS, and MIME sniffing.",
-                    location: url,
-                    evidence: [
-                        {"header": "Strict-Transport-Security", "issue": "HSTS header missing"},
-                        {"header": "Content-Security-Policy", "issue": "CSP header missing"}
-                    ],
-                    remediation: [
-                        "Add Strict-Transport-Security header with max-age=63072000; includeSubDomains; preload",
-                        "Implement Content-Security-Policy with appropriate directives",
-                        "Add X-Frame-Options header with DENY or SAMEORIGIN"
-                    ],
-                    references: [
-                        "https://owasp.org/www-project-secure-headers/"
-                    ]
-                },
-                {
-                    id: "outdated-jquery",
-                    title: "OUTDATED_JQUERY_VERSION",
-                    severity: "Medium",
-                    category: "Vulnerable Components",
-                    description: "Outdated jQuery version detected (v1.12.4). This version contains known vulnerabilities that could be exploited.",
-                    location: "https://code.jquery.com/jquery-1.12.4.min.js",
-                    evidence: "jQuery version 1.12.4 detected",
-                    remediation: [
-                        "Upgrade to the latest jQuery version (3.6.0+)",
-                        "Use Subresource Integrity (SRI) when loading from CDN",
-                        "Consider removing jQuery if not needed"
-                    ],
-                    references: [
-                        "https://nvd.nist.gov/vuln/search/results?form_type=Advanced&results_type=overview&search_type=all&cpe_vendor=cpe%3A%2F%3Ajquery&cpe_product=cpe%3A%2F%3Ajquery%3Ajquery"
-                    ]
-                },
-                {
-                    id: "info-disclosure",
-                    title: "INFORMATION_DISCLOSURE",
-                    severity: "Low",
-                    category: "Information Disclosure",
-                    description: "Debug information found in HTML source code. This could reveal sensitive information about the application.",
-                    location: "HTML Source Code",
-                    evidence: "Pattern matched: debug.*?true",
-                    remediation: [
-                        "Remove debug information from production code",
-                        "Implement proper error handling that doesn't expose stack traces",
-                        "Minify production JavaScript and CSS"
-                    ],
-                    references: []
-                }
-            ];
+        async function simulateScanProgress() {
+            return new Promise(resolve => {
+                // Simulate different scanning phases
+                setTimeout(() => {
+                    updateLoadingText("CONNECTING TO TARGET...");
+                }, 500);
+                
+                setTimeout(() => {
+                    updateLoadingText("ANALYZING HTTP HEADERS...");
+                }, 1500);
+                
+                setTimeout(() => {
+                    updateLoadingText("SCANNING FOR VULNERABILITIES...");
+                }, 2500);
+                
+                setTimeout(() => {
+                    updateLoadingText("GENERATING REPORT...");
+                    resolve();
+                }, 3500);
+            });
+        }
 
-            if (Math.random() > 0.7) {
-                vulnerabilities.unshift({
-                    id: "sqli",
-                    title: "SQL_INJECTION_VULNERABILITY",
-                    severity: "Critical",
+        function updateLoadingText(text) {
+            const loadingText = document.querySelector('.scanning-text');
+            if (loadingText) {
+                loadingText.textContent = text;
+                // Reset animation
+                loadingText.style.animation = 'none';
+                void loadingText.offsetWidth; // Trigger reflow
+                loadingText.style.animation = 'typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite';
+            }
+        }
+
+        function generateDemoResults(url) {
+            const vulnerabilities = [];
+            
+            // Always include these basic vulnerabilities
+            vulnerabilities.push({
+                id: "security-headers",
+                title: "MISSING_SECURITY_HEADERS",
+                severity: "Medium",
+                category: "Security Misconfiguration",
+                description: "Critical security headers are missing, exposing the site to various attacks.",
+                location: "HTTP Headers",
+                evidence: "Missing: Strict-Transport-Security, Content-Security-Policy, X-Frame-Options",
+                remediation: [
+                    "Implement HSTS header: Strict-Transport-Security: max-age=63072000; includeSubDomains; preload",
+                    "Add Content-Security-Policy with appropriate directives",
+                    "Include X-Frame-Options: DENY"
+                ]
+            });
+
+            vulnerabilities.push({
+                id: "server-info",
+                title: "SERVER_INFO_DISCLOSURE",
+                severity: "Low",
+                category: "Information Disclosure",
+                description: "Server version information is exposed in headers.",
+                location: "Server Header",
+                evidence: "Server: Apache/2.4.29 (Ubuntu)",
+                remediation: [
+                    "Configure server to remove version information",
+                    "Use ServerTokens Prod in Apache configuration"
+                ]
+            });
+
+            // Randomly add some vulnerabilities
+            if (Math.random() > 0.3) {
+                vulnerabilities.push({
+                    id: "xss",
+                    title: "POTENTIAL_XSS_VULNERABILITY",
+                    severity: "High",
                     category: "Injection",
-                    description: "Parameter 'id' is vulnerable to SQL Injection. This could allow attackers to view, modify, or delete database contents.",
-                    location: `${url}?id=1' OR '1'='1`,
-                    evidence: "Payload: ' OR '1'='1 | Error: you have an error in your sql syntax",
+                    description: "Reflected input found without proper encoding.",
+                    location: `${url}/search?q=<script>`,
+                    evidence: "User input reflected without encoding",
                     remediation: [
-                        "Use parameterized queries/prepared statements",
-                        "Implement proper input validation",
-                        "Use an ORM that handles SQL escaping",
-                        "Apply the principle of least privilege to database accounts"
-                    ],
-                    references: [
-                        "https://owasp.org/www-community/attacks/SQL_Injection"
+                        "Implement proper output encoding",
+                        "Use Content Security Policy"
                     ]
                 });
             }
 
             if (Math.random() > 0.5) {
                 vulnerabilities.push({
-                    id: "xss",
-                    title: "CROSS_SITE_SCRIPTING",
-                    severity: "High",
-                    category: "Injection",
-                    description: "Reflected XSS vulnerability detected in search parameter. This could allow attackers to execute arbitrary JavaScript in users' browsers.",
-                    location: `${url}?search=<script>alert(1)</script>`,
-                    evidence: "Payload: <script>alert(1)</script> executed successfully",
+                    id: "cors",
+                    title: "INSECURE_CORS_CONFIGURATION",
+                    severity: "Medium",
+                    category: "Security Misconfiguration",
+                    description: "CORS policy is too permissive.",
+                    location: "Access-Control-Allow-Origin Header",
+                    evidence: "Access-Control-Allow-Origin: *",
                     remediation: [
-                        "Implement proper output encoding",
-                        "Use 
+                        "Restrict CORS to specific domains",
+                        "Avoid using wildcard (*) for sensitive endpoints"
+                    ]
+                });
+            }
+
+            if (Math.random() > 0.7) {
+                vulnerabilities.push({
+                    id: "sql-error",
+                    title: "SQL_ERROR_DISCLOSURE",
+                    severity: "Medium",
+                    category: "Information Disclosure",
+                    description: "Database errors are displayed to users.",
+                    location: `${url}/product?id=1'`,
+                    evidence: "SQL syntax error displayed in response",
+                    remediation: [
+                        "Implement proper error handling",
+                        "Use parameterized queries"
+                    ]
+                });
+            }
+
+            const overallScore = Math.floor(100 - (vulnerabilities.length * 10));
+            return {
+                url: url,
+                overall_score: Math.max(10, overallScore), // Ensure score isn't too low
+                vulnerabilities: vulnerabilities,
+                scan_time: (Math.random() * 3 + 2).toFixed(2),
+                timestamp: new Date().toLocaleString()
+            };
+        }
+
+        function displayResults(result) {
+            const resultsDiv = document.getElementById('results');
+            const scoreClass = getScoreClass(result.overall_score);
+
+            let html = `
+                <div class="card" style="animation: fadeIn 1s ease-out;">
+                    <h2>SCAN COMPLETE</h2>
+                    <div style="text-align: center; border: 1px solid var(--terminal-border); padding: 20px; margin: 15px 0; position: relative;">
+                        <div style="font-size: 3rem; font-weight: bold; margin: 10px 0; font-family: 'Courier New', monospace; color: ${getScoreColor(result.overall_score)};">
+                            ${result.overall_score}%
+                        </div>
+                        <p>SECURITY_RATING: ${getScoreLabel(result.overall_score)}</p>
+                        <p>SCAN_DURATION: ${result.scan_time}s</p>
+                        <p>TARGET: ${result.url}</p>
+                        <p>TIMESTAMP: ${result.timestamp}</p>
+                    </div>
+            `;
+
+            if (result.vulnerabilities.length > 0) {
+                html += `<h3>VULNERABILITIES DETECTED (${result.vulnerabilities.length})</h3>`;
+                
+                result.vulnerabilities.forEach(vuln => {
+                    const severityClass = `severity-${vuln.severity.toLowerCase()}`;
+                    const badgeClass = `badge-${vuln.severity.toLowerCase()}`;
+
+                    html += `
+                        <div class="vulnerability ${severityClass}">
+                            <div style="font-size: 1.2rem; margin-bottom: 8px;">
+                                <span class="severity-badge ${badgeClass}">${vuln.severity.toUpperCase()}</span>
+                                ${vuln.title}
+                            </div>
+                            <div style="color: var(--matrix-green); font-size: 0.9rem; margin-bottom: 10px; font-style: italic;">
+                                ${vuln.category}
+                            </div>
+                            <div style="margin-bottom: 15px;">${vuln.description}</div>
+                            <div><strong>LOCATION:</strong> ${vuln.location}</div>
+                            <div style="margin-top: 15px; color: var(--matrix-green); font-weight: bold;">REMEDIATION:</div>
+                            <ul style="padding-left: 20px; margin-top: 10px;">
+                                ${vuln.remediation.map(step => `<li>${step}</li>`).join('')}
+           
